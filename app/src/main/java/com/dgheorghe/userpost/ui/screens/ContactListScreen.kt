@@ -6,6 +6,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
+import com.dgheorghe.userpost.ui.theme.StyledText
 import com.dgheorghe.userpost.ui.theme.UserPostTheme
 
 @Composable
@@ -19,7 +20,8 @@ fun ContactListScreen(navController: NavController) {
 fun Greeting(name: String, modifier: Modifier = Modifier) {
     Text(
         text = "Hello $name!",
-        modifier = modifier
+        modifier = modifier,
+        style = StyledText.displayBold
     )
 }
 
