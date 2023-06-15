@@ -2,7 +2,6 @@ package com.dgheorghe.userpost.repository
 
 import com.dgheorghe.userpost.api.RetrofitUserInstance
 import com.dgheorghe.userpost.domain.User
-import com.dgheorghe.userpost.ui.viewmodel.DummyData
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
