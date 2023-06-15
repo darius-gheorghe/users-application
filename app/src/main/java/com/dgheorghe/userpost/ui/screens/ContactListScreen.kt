@@ -1,13 +1,11 @@
 package com.dgheorghe.userpost.ui.screens
 
-import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -26,14 +24,11 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
-import com.bumptech.glide.integration.compose.GlideImage
 import com.dgheorghe.userpost.R
 import com.dgheorghe.userpost.domain.User
 import com.dgheorghe.userpost.ui.theme.StyledColors
@@ -127,29 +122,6 @@ fun ContactDetailsCard(navController: NavController, userDetails: User) {
     }
 }
 
-@OptIn(ExperimentalGlideComposeApi::class)
-@Composable
-fun ContactImageAvatar(imagePath: String) {
-    GlideImage(
-        model = imagePath,
-        contentDescription = stringResource(id = R.string.user_avatar_description),
-        modifier = Modifier.fillMaxSize()
-    ) {
-        it
-            .error(R.drawable.ic_launcher_background)
-            .placeholder(R.drawable.ic_launcher_foreground)
-            .load(imagePath)
-    }
-}
-
-@Composable
-fun ContactInitialsAvatar(contactInitials: String) {
-    Canvas(modifier = Modifier.fillMaxSize()) {
-        drawCircle(SolidColor(StyledColors.LIGHT_GRAY_INACTIVE))
-    }
-    Text(text = contactInitials, style = StyledText.textBoldWhite)
-}
-
 @Composable
 fun ContactNameText(contactName: String) {
     Text(
@@ -175,10 +147,6 @@ fun ContactNavigationIcon(contactId: Long, navController: NavController) {
             )
         }
     }
-}
-
-fun String.getInitials(): String = this.split(" ").let {
-    "${it[0][0]}${(it[1][0])}"
 }
 
 fun navigateToUserPosts(navController: NavController) = navController.navigate("user-post") {

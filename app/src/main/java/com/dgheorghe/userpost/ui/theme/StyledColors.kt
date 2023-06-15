@@ -6,7 +6,6 @@ class StyledColors {
     companion object {
         val WHITE: Color = Color(0xFFFFFFFF)
         val LIGHT_GRAY: Color = Color(0xFFEFF2F7)
-        val GOLD_GRAY: Color = Color(0xFFEAEAEA)
         val BLACK: Color = Color(0xFF161F28)
         val LIGHT_GRAY_INACTIVE: Color = Color(0xFFC1C8D7)
         val DARK_GRAY: Color = Color(0xFF98A5BE)
