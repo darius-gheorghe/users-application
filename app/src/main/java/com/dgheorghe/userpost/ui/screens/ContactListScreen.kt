@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -17,6 +18,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -33,12 +35,35 @@ import com.dgheorghe.userpost.R
 import com.dgheorghe.userpost.domain.User
 import com.dgheorghe.userpost.ui.theme.StyledColors
 import com.dgheorghe.userpost.ui.theme.StyledText
+import com.dgheorghe.userpost.ui.viewmodel.ContactListScreenState
 import com.dgheorghe.userpost.ui.viewmodel.ContactListViewModel
 
 @Composable
 fun ContactListScreen(navController: NavController, viewModel: ContactListViewModel = viewModel()) {
-    val userList by viewModel.uiState.collectAsState()
+    val uiState by viewModel.uiState.collectAsState()
 
+    when (uiState) {
+        is ContactListScreenState.Success -> SuccessState(
+            userList = (uiState as ContactListScreenState.Success).usersList,
+            navController = navController
+        )
+
+        is ContactListScreenState.Loading -> LoadingState()
+    }
+}
+
+@Composable
+fun LoadingState() {
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
+    ) {
+        CircularProgressIndicator(color = StyledColors.WHITE, strokeWidth = 5.dp)
+    }
+}
+
+@Composable
+fun SuccessState(userList: List<User>, navController: NavController) {
     Column(
         modifier = Modifier
             .verticalScroll(rememberScrollState())
@@ -49,7 +74,7 @@ fun ContactListScreen(navController: NavController, viewModel: ContactListViewMo
         LazyColumn(
             modifier = Modifier.height(564.dp)
         ) {
-            itemsIndexed(userList.usersList) { _, userDetails ->
+            itemsIndexed(userList) { _, userDetails ->
                 ContactDetailsCard(navController = navController, userDetails)
             }
         }
