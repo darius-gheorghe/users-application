@@ -15,7 +15,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             Surface(
                 modifier = Modifier.fillMaxSize(),
-                color = StyledColors.WHITE
+                color = StyledColors.LIGHT_GRAY
             ) {
                 UserPostApp()
             }
