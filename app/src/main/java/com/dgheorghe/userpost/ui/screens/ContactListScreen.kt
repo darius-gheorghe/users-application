@@ -43,7 +43,6 @@ fun ContactListScreen(navController: NavController, viewModel: ContactListViewMo
         modifier = Modifier
             .verticalScroll(rememberScrollState())
             .padding(1.dp),
-        verticalArrangement = Arrangement.spacedBy(1.dp)
     ) {
         ContactListTopBar()
         ContactListTitle()
