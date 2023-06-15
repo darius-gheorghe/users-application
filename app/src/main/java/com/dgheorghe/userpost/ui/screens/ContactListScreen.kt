@@ -40,7 +40,9 @@ fun ContactListScreen(navController: NavController, viewModel: ContactListViewMo
     val userList by viewModel.uiState.collectAsState()
 
     Column(
-        modifier = Modifier.verticalScroll(rememberScrollState()),
+        modifier = Modifier
+            .verticalScroll(rememberScrollState())
+            .padding(1.dp),
         verticalArrangement = Arrangement.spacedBy(1.dp)
     ) {
         ContactListTopBar()
@@ -105,19 +107,24 @@ fun ContactDetailsCard(navController: NavController, userDetails: User) {
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Start
         ) {
-                Box(
-                    contentAlignment = Alignment.Center,
-                    modifier = Modifier
-                        .padding(end = 16.dp)
-                        .size(46.dp)
-                ) {
-                    if (userDetails.id.toInt() % 2 == 0)
-                        ContactInitialsAvatar(contactInitials = userDetails.name.getInitials())
-                    else
-                        ContactImageAvatar(imagePath = "placeHolderString")
-                }
-                ContactNameText(contactName = userDetails.name)
-            ContactNavigationIcon(contactId = 1, navController = navController)
+            val avatarString = getUserAvatarString(userDetails.id.toInt(), userDetails.name)
+
+            Box(
+                contentAlignment = Alignment.Center,
+                modifier = Modifier
+                    .padding(end = 16.dp)
+                    .size(46.dp)
+            ) {
+                GetAvatarForUser(avatarString = avatarString)
+            }
+            ContactNameText(contactName = userDetails.name)
+            ContactNavigationIcon(
+                contactId = 1,
+                navController = navController,
+                contactAvatarString = avatarString,
+                contactName = userDetails.name,
+                contactEmail = userDetails.email
+            )
         }
     }
 }
@@ -131,7 +138,13 @@ fun ContactNameText(contactName: String) {
 }
 
 @Composable
-fun ContactNavigationIcon(contactId: Long, navController: NavController) {
+fun ContactNavigationIcon(
+    contactId: Long,
+    navController: NavController,
+    contactAvatarString: String,
+    contactName: String,
+    contactEmail: String
+) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -139,7 +152,15 @@ fun ContactNavigationIcon(contactId: Long, navController: NavController) {
         contentAlignment = Alignment.CenterEnd
     ) {
         IconButton(
-            onClick = { navigateToUserPosts(navController) },
+            onClick = {
+                navigateToUserPosts(
+                    navController,
+                    contactId.toInt(),
+                    contactAvatarString,
+                    contactName,
+                    contactEmail
+                )
+            },
         ) {
             Image(
                 painter = painterResource(id = R.drawable.ic_nav_icon),
@@ -149,6 +170,13 @@ fun ContactNavigationIcon(contactId: Long, navController: NavController) {
     }
 }
 
-fun navigateToUserPosts(navController: NavController) = navController.navigate("user-post") {
-    launchSingleTop = true
-}
+fun navigateToUserPosts(
+    navController: NavController,
+    userId: Int,
+    userAvatarString: String,
+    userName: String,
+    userEmail: String
+) =
+    navController.navigate("user-post/${userId}/${userAvatarString}/${userName}/${userEmail}") {
+        launchSingleTop = true
+    }

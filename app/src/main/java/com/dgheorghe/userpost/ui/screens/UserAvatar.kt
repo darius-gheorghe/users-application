@@ -36,6 +36,16 @@ fun ContactInitialsAvatar(contactInitials: String) {
     Text(text = contactInitials, style = StyledText.textBoldWhite)
 }
 
+@Composable
+fun GetAvatarForUser(avatarString: String) = if (avatarString.length <= 2)
+    ContactInitialsAvatar(contactInitials = avatarString)
+else
+    ContactImageAvatar(imagePath = "placeHolderString")
+
+fun getUserAvatarString(userId: Int, userName: String): String =
+    if (userId % 2 == 0) userName.getInitials()
+    else "placeHolderString"
+
 fun String.getInitials(): String = this.split(" ").let {
     "${it[0][0]}${(it[1][0])}"
 }
