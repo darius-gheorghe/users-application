@@ -38,169 +38,174 @@ import com.dgheorghe.userpost.ui.theme.StyledText
 import com.dgheorghe.userpost.ui.viewmodel.ContactListScreenState
 import com.dgheorghe.userpost.ui.viewmodel.ContactListViewModel
 
-@Composable
-fun ContactListScreen(navController: NavController, viewModel: ContactListViewModel = viewModel()) {
-    val uiState by viewModel.uiState.collectAsState()
-
-    when (uiState) {
-        is ContactListScreenState.Success -> SuccessState(
-            userList = (uiState as ContactListScreenState.Success).usersList,
-            navController = navController
-        )
-
-        is ContactListScreenState.Loading -> LoadingState()
-    }
-}
-
-@Composable
-fun LoadingState() {
-    Box(
-        modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
+object ContactListPage {
+    @Composable
+    fun Screen(
+        navController: NavController,
+        viewModel: ContactListViewModel = viewModel()
     ) {
-        CircularProgressIndicator(color = StyledColors.WHITE, strokeWidth = 5.dp)
-    }
-}
+        val uiState by viewModel.uiState.collectAsState()
 
-@Composable
-fun SuccessState(userList: List<User>, navController: NavController) {
-    Column(
-        modifier = Modifier
-            .verticalScroll(rememberScrollState())
-            .padding(1.dp),
-    ) {
-        ContactListTopBar()
-        ContactListTitle()
-        LazyColumn(
-            modifier = Modifier.height(564.dp)
-        ) {
-            itemsIndexed(userList) { _, userDetails ->
-                ContactDetailsCard(navController = navController, userDetails)
-            }
+        when (uiState) {
+            is ContactListScreenState.Success -> SuccessState(
+                userList = (uiState as ContactListScreenState.Success).usersList,
+                navController = navController
+            )
+
+            is ContactListScreenState.Loading -> LoadingState()
         }
     }
-}
 
-@Composable
-fun ContactListTopBar() {
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(StyledColors.WHITE)
-            .padding(
-                top = 48.dp,
-                start = 24.dp,
-                end = 24.dp,
-                bottom = 16.dp
-            )
-    ) {
-        Text(
-            text = stringResource(id = R.string.contact_list_top_bar),
-            style = StyledText.displayBold,
-        )
+    @Composable
+    private fun LoadingState() {
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ) {
+            CircularProgressIndicator(color = StyledColors.WHITE, strokeWidth = 5.dp)
+        }
     }
-}
 
-@Composable
-fun ContactListTitle() {
-    Text(
-        text = stringResource(id = R.string.contact_list_title),
-        style = StyledText.textSemiBold,
-        modifier = Modifier.padding(
-            vertical = 12.dp,
-            horizontal = 24.dp
-        )
-    )
-}
-
-@Composable
-fun ContactDetailsCard(navController: NavController, userDetails: User) {
-    Card(
-        modifier = Modifier.padding(1.dp),
-        shape = RoundedCornerShape(0.dp),
-        colors = CardDefaults.cardColors(containerColor = StyledColors.WHITE)
-    ) {
-        Row(
+    @Composable
+    private fun SuccessState(userList: List<User>, navController: NavController) {
+        Column(
             modifier = Modifier
-                .padding(
-                    start = 24.dp,
-                    top = 24.dp,
-                    bottom = 24.dp,
-                )
-                .fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Start
+                .verticalScroll(rememberScrollState())
+                .padding(1.dp),
         ) {
-            val avatarString = getUserAvatarString(userDetails.id.toInt(), userDetails.name)
-
-            Box(
-                contentAlignment = Alignment.Center,
-                modifier = Modifier
-                    .padding(end = 16.dp)
-                    .size(46.dp)
+            ContactListTopBar()
+            ContactListTitle()
+            LazyColumn(
+                modifier = Modifier.height(564.dp)
             ) {
-                GetAvatarForUser(avatarString = avatarString)
+                itemsIndexed(userList) { _, userDetails ->
+                    ContactDetailsCard(navController = navController, userDetails)
+                }
             }
-            ContactNameText(contactName = userDetails.name)
-            ContactNavigationIcon(
-                contactId = 1,
-                navController = navController,
-                contactAvatarString = avatarString,
-                contactName = userDetails.name,
-                contactEmail = userDetails.email
-            )
         }
     }
-}
 
-@Composable
-fun ContactNameText(contactName: String) {
-    Text(
-        text = contactName,
-        style = StyledText.textRegularBlack,
-    )
-}
-
-@Composable
-fun ContactNavigationIcon(
-    contactId: Long,
-    navController: NavController,
-    contactAvatarString: String,
-    contactName: String,
-    contactEmail: String
-) {
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(end = 16.dp),
-        contentAlignment = Alignment.CenterEnd
-    ) {
-        IconButton(
-            onClick = {
-                navigateToUserPosts(
-                    navController,
-                    contactId.toInt(),
-                    contactAvatarString,
-                    contactName,
-                    contactEmail
+    @Composable
+    private fun ContactListTopBar() {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(StyledColors.WHITE)
+                .padding(
+                    top = 48.dp,
+                    start = 24.dp,
+                    end = 24.dp,
+                    bottom = 16.dp
                 )
-            },
         ) {
-            Image(
-                painter = painterResource(id = R.drawable.ic_nav_icon),
-                contentDescription = stringResource(id = R.string.navigation_description)
+            Text(
+                text = stringResource(id = R.string.contact_list_top_bar),
+                style = StyledText.displayBold,
             )
         }
     }
-}
 
-fun navigateToUserPosts(
-    navController: NavController,
-    userId: Int,
-    userAvatarString: String,
-    userName: String,
-    userEmail: String
-) =
-    navController.navigate("user-post/${userId}/${userAvatarString}/${userName}/${userEmail}") {
-        launchSingleTop = true
+    @Composable
+    private fun ContactListTitle() {
+        Text(
+            text = stringResource(id = R.string.contact_list_title),
+            style = StyledText.textSemiBold,
+            modifier = Modifier.padding(
+                vertical = 12.dp,
+                horizontal = 24.dp
+            )
+        )
     }
+
+    @Composable
+    private fun ContactDetailsCard(navController: NavController, userDetails: User) {
+        Card(
+            modifier = Modifier.padding(1.dp),
+            shape = RoundedCornerShape(0.dp),
+            colors = CardDefaults.cardColors(containerColor = StyledColors.WHITE)
+        ) {
+            Row(
+                modifier = Modifier
+                    .padding(
+                        start = 24.dp,
+                        top = 24.dp,
+                        bottom = 24.dp,
+                    )
+                    .fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Start
+            ) {
+                val avatarString = getUserAvatarString(userDetails.id.toInt(), userDetails.name)
+
+                Box(
+                    contentAlignment = Alignment.Center,
+                    modifier = Modifier
+                        .padding(end = 16.dp)
+                        .size(46.dp)
+                ) {
+                    GetAvatarForUser(avatarString = avatarString)
+                }
+                ContactNameText(contactName = userDetails.name)
+                ContactNavigationIcon(
+                    contactId = userDetails.id,
+                    navController = navController,
+                    contactAvatarString = avatarString,
+                    contactName = userDetails.name,
+                    contactEmail = userDetails.email
+                )
+            }
+        }
+    }
+
+    @Composable
+    private fun ContactNameText(contactName: String) {
+        Text(
+            text = contactName,
+            style = StyledText.textRegularBlack,
+        )
+    }
+
+    @Composable
+    private fun ContactNavigationIcon(
+        contactId: Long,
+        navController: NavController,
+        contactAvatarString: String,
+        contactName: String,
+        contactEmail: String
+    ) {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(end = 16.dp),
+            contentAlignment = Alignment.CenterEnd
+        ) {
+            IconButton(
+                onClick = {
+                    navigateToUserPosts(
+                        navController,
+                        contactId.toInt(),
+                        contactAvatarString,
+                        contactName,
+                        contactEmail
+                    )
+                },
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.ic_nav_icon),
+                    contentDescription = stringResource(id = R.string.navigation_description)
+                )
+            }
+        }
+    }
+
+    private fun navigateToUserPosts(
+        navController: NavController,
+        userId: Int,
+        userAvatarString: String,
+        userName: String,
+        userEmail: String
+    ) =
+        navController.navigate("user-post/${userId}/${userAvatarString}/${userName}/${userEmail}") {
+            launchSingleTop = true
+        }
+}

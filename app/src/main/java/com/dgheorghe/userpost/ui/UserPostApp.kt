@@ -6,8 +6,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.dgheorghe.userpost.ui.screens.ContactListScreen
-import com.dgheorghe.userpost.ui.screens.UserPostScreen
+import com.dgheorghe.userpost.ui.screens.ContactListPage
+import com.dgheorghe.userpost.ui.screens.UserPostPage
 
 @Composable
 fun UserPostApp() {
@@ -15,7 +15,7 @@ fun UserPostApp() {
 
     NavHost(navController = navController, startDestination = "contact-list") {
         composable(route = "contact-list") {
-            ContactListScreen(navController)
+            ContactListPage.Screen(navController)
         }
 
         composable(
@@ -25,7 +25,7 @@ fun UserPostApp() {
                 navArgument("userAvatarString") { type = NavType.StringType },
             )
         ) { backStackEntry ->
-            UserPostScreen(
+            UserPostPage.Screen(
                 navController,
                 backStackEntry.arguments?.getInt("userId")!!,
                 backStackEntry.arguments?.getString("userAvatarString")!!,

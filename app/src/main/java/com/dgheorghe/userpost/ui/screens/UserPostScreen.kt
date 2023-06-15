@@ -34,117 +34,120 @@ import com.dgheorghe.userpost.ui.theme.StyledColors
 import com.dgheorghe.userpost.ui.theme.StyledText
 import com.dgheorghe.userpost.ui.viewmodel.UserPostViewModel
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun UserPostScreen(
-    navController: NavController,
-    userId: Int,
-    contactAvatarString: String,
-    contactName: String,
-    contactEmail: String
-) {
-    val viewModel = UserPostViewModel(userId.toLong())
-    val postListState by viewModel.postListState.collectAsState()
+object UserPostPage {
+    @OptIn(ExperimentalMaterial3Api::class)
+    @Composable
+    fun Screen(
+        navController: NavController,
+        userId: Int,
+        contactAvatarString: String,
+        contactName: String,
+        contactEmail: String
+    ) {
+        val viewModel = UserPostViewModel(userId.toLong())
+        val postListState by viewModel.postListState.collectAsState()
 
-    Scaffold(topBar = { UserPostTopBar(navController) }) {
-        Column(
-            modifier = Modifier
-                .verticalScroll(rememberScrollState())
-                .padding(it)
-                .fillMaxWidth(),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Box(
-                contentAlignment = Alignment.Center,
+        Scaffold(topBar = { UserPostTopBar(navController) }) {
+            Column(
                 modifier = Modifier
-                    .padding(top = 16.dp)
-                    .size(46.dp)
+                    .verticalScroll(rememberScrollState())
+                    .padding(it)
+                    .fillMaxWidth(),
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                GetAvatarForUser(avatarString = contactAvatarString)
-            }
-            ContactName(contactName = contactName)
-            ContactEmail(contactEmail = contactEmail)
-            LazyColumn(modifier = Modifier.height(480.dp)) {
-                itemsIndexed(postListState) {_, posting ->
-                    UserPostCard(posting = posting)
+                Box(
+                    contentAlignment = Alignment.Center,
+                    modifier = Modifier
+                        .padding(top = 16.dp)
+                        .size(46.dp)
+                ) {
+                    GetAvatarForUser(avatarString = contactAvatarString)
+                }
+                ContactName(contactName = contactName)
+                ContactEmail(contactEmail = contactEmail)
+                LazyColumn(modifier = Modifier.height(480.dp)) {
+                    itemsIndexed(postListState) { _, posting ->
+                        UserPostCard(posting = posting)
+                    }
                 }
             }
         }
     }
-}
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun UserPostTopBar(navController: NavController) {
-    TopAppBar(
-        title = { TopBarTitle() },
-        navigationIcon = { TopBarIcon(navController) },
+    @OptIn(ExperimentalMaterial3Api::class)
+    @Composable
+    private fun UserPostTopBar(navController: NavController) {
+        TopAppBar(
+            title = { TopBarTitle() },
+            navigationIcon = { TopBarIcon(navController) },
+        )
+    }
+
+    @Composable
+    private fun TopBarTitle() = Text(
+        text = stringResource(id = R.string.user_post_appbar_title),
+        style = StyledText.displayBold
     )
-}
 
-@Composable
-fun TopBarTitle() = Text(
-    text = stringResource(id = R.string.user_post_appbar_title),
-    style = StyledText.displayBold
-)
-
-@Composable
-fun TopBarIcon(navController: NavController) = IconButton(
-    onClick = { navigateToContactList(navController) }
-) {
-    Image(
-        painter = painterResource(R.drawable.ic_navigation_back),
-        contentDescription = stringResource(id = R.string.navigation_back_description)
-    )
-}
-
-@Composable
-fun ContactName(contactName: String) {
-    Text(
-        modifier = Modifier.padding(top = 16.dp),
-        text = contactName,
-        style = StyledText.textBoldBlack,
-    )
-}
-
-@Composable
-fun ContactEmail(contactEmail: String) {
-    Text(
-        modifier = Modifier.padding(top = 10.dp, bottom = 34.dp),
-        text = contactEmail,
-        style = StyledText.displayRegular,
-    )
-}
-
-@Composable
-fun UserPostCard(posting: Post) {
-    Card(
-        modifier = Modifier.padding(1.dp),
-        shape = RoundedCornerShape(0.dp),
-        colors = CardDefaults.cardColors(containerColor = StyledColors.GRAY_INFO)
+    @Composable
+    private fun TopBarIcon(navController: NavController) = IconButton(
+        onClick = { navigateToContactList(navController) }
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 24.dp)
+        Image(
+            painter = painterResource(R.drawable.ic_navigation_back),
+            contentDescription = stringResource(id = R.string.navigation_back_description)
+        )
+    }
+
+    @Composable
+    private fun ContactName(contactName: String) {
+        Text(
+            modifier = Modifier.padding(top = 16.dp),
+            text = contactName,
+            style = StyledText.textBoldBlack,
+        )
+    }
+
+    @Composable
+    private fun ContactEmail(contactEmail: String) {
+        Text(
+            modifier = Modifier.padding(top = 10.dp, bottom = 34.dp),
+            text = contactEmail,
+            style = StyledText.displayRegular,
+        )
+    }
+
+    @Composable
+    private fun UserPostCard(posting: Post) {
+        Card(
+            modifier = Modifier.padding(1.dp),
+            shape = RoundedCornerShape(0.dp),
+            colors = CardDefaults.cardColors(containerColor = StyledColors.GRAY_INFO)
         ) {
-            Text(
-                text = posting.title,
-                style = StyledText.textBoldBlack,
-                modifier = Modifier.padding(
-                    top = 24.dp,
-                    bottom = 10.dp
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 24.dp)
+            ) {
+                Text(
+                    text = posting.title,
+                    style = StyledText.textBoldBlack,
+                    modifier = Modifier.padding(
+                        top = 24.dp,
+                        bottom = 10.dp
+                    )
                 )
-            )
-            Text(
-                text = posting.body,
-                style = StyledText.displayRegular,
-                modifier = Modifier.padding(bottom = 24.dp)
-            )
+                Text(
+                    text = posting.body,
+                    style = StyledText.displayRegular,
+                    modifier = Modifier.padding(bottom = 24.dp)
+                )
+            }
         }
     }
-}
 
-fun navigateToContactList(navController: NavController) = navController.navigate("contact-list") {
-    launchSingleTop = true
+    private fun navigateToContactList(navController: NavController) =
+        navController.navigate("contact-list") {
+            launchSingleTop = true
+        }
 }
