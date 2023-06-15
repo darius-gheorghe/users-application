@@ -4,16 +4,24 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -21,7 +29,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.dgheorghe.userpost.R
+import com.dgheorghe.userpost.domain.Post
+import com.dgheorghe.userpost.ui.theme.StyledColors
 import com.dgheorghe.userpost.ui.theme.StyledText
+import com.dgheorghe.userpost.ui.viewmodel.UserPostViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -32,6 +43,9 @@ fun UserPostScreen(
     contactName: String,
     contactEmail: String
 ) {
+    val viewModel = UserPostViewModel(userId.toLong())
+    val postListState by viewModel.postListState.collectAsState()
+
     Scaffold(topBar = { UserPostTopBar(navController) }) {
         Column(
             modifier = Modifier
@@ -50,6 +64,11 @@ fun UserPostScreen(
             }
             ContactName(contactName = contactName)
             ContactEmail(contactEmail = contactEmail)
+            LazyColumn(modifier = Modifier.height(480.dp)) {
+                itemsIndexed(postListState) {_, posting ->
+                    UserPostCard(posting = posting)
+                }
+            }
         }
     }
 }
@@ -95,6 +114,35 @@ fun ContactEmail(contactEmail: String) {
         text = contactEmail,
         style = StyledText.displayRegular,
     )
+}
+
+@Composable
+fun UserPostCard(posting: Post) {
+    Card(
+        modifier = Modifier.padding(1.dp),
+        shape = RoundedCornerShape(0.dp),
+        colors = CardDefaults.cardColors(containerColor = StyledColors.GRAY_INFO)
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 24.dp)
+        ) {
+            Text(
+                text = posting.title,
+                style = StyledText.textBoldBlack,
+                modifier = Modifier.padding(
+                    top = 24.dp,
+                    bottom = 10.dp
+                )
+            )
+            Text(
+                text = posting.body,
+                style = StyledText.displayRegular,
+                modifier = Modifier.padding(bottom = 24.dp)
+            )
+        }
+    }
 }
 
 fun navigateToContactList(navController: NavController) = navController.navigate("contact-list") {

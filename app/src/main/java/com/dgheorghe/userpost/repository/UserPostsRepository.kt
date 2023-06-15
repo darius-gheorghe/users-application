@@ -22,7 +22,7 @@ class UserPostsRepository(userId: Long) {
             }.onSuccess {
                 observeUserPosts.tryEmit(it)
             }.onFailure {
-                observeUserPosts.tryEmit(DummyData.getDummyPostList(userId))
+                observeUserPosts.emit(DummyData.getDummyPostList(userId))
                 this.cancel()
             }
         }
