@@ -18,13 +18,14 @@ class UserPostViewModel(userId: Long) : ViewModel() {
 
     init {
         _postListState = getUserPosts().stateIn(
-                viewModelScope,
-                SharingStarted.Eagerly,
-                UserPostScreenState.Loading
-            )
+            viewModelScope,
+            SharingStarted.Eagerly,
+            UserPostScreenState.Loading
+        )
     }
 
-    private fun getUserPosts() = _userPostRepository.observeUserPosts.map { UserPostScreenState.Success(it) }
+    private fun getUserPosts() =
+        _userPostRepository.observeUserPosts.map { UserPostScreenState.Success(it) }
 }
 
 sealed interface UserPostScreenState {

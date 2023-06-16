@@ -23,7 +23,7 @@ class UserPostsRepository(userId: Long) {
             }.onSuccess {
                 observeUserPosts.emit(it)
             }.onFailure {
-                Log.e( "UserPostsRepository === getUserPosts() failure -: ", it.message!!)
+                Log.e("UserPostsRepository === getUserPosts() failure -: ", it.message!!)
                 //Used dummy data as the api seems to be down from time to time
                 observeUserPosts.emit(DummyData.getDummyPostList())
                 this.cancel()

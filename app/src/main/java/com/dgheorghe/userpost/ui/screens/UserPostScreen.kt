@@ -171,7 +171,9 @@ object UserPostPage {
                 Text(
                     text = posting.title,
                     style = StyledText.textBoldBlack,
-                    modifier = Modifier.padding(bottom = 10.dp).height(20.dp)
+                    modifier = Modifier
+                        .padding(bottom = 10.dp)
+                        .height(20.dp)
                 )
                 Text(
                     text = posting.body,

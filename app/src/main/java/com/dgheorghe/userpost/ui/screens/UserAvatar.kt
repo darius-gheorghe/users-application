@@ -29,7 +29,9 @@ object UserAvatar {
         GlideImage(
             model = imagePath,
             contentDescription = stringResource(id = R.string.user_avatar_description),
-            modifier = Modifier.fillMaxSize().clip(RoundedCornerShape(50.dp)),
+            modifier = Modifier
+                .fillMaxSize()
+                .clip(RoundedCornerShape(50.dp)),
         ) {
             it
                 .error(R.drawable.ic_launcher_background)
