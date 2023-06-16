@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.dgheorghe.userpost.domain.User
 import com.dgheorghe.userpost.repository.UsersRepository
-import com.dgheorghe.userpost.ui.screens.getInitials
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -37,12 +36,15 @@ class ContactListViewModel : ViewModel() {
             }
 
     private fun getAvatarStringForUsers(users: List<User>): List<String> = users.map {
-        if ((it.id).toInt() % 2 == 0)
+        if ((it.id).toInt() % 12 == 0)
             it.name.getInitials()
         else {
-            Random.nextInt(from = 0, until = 500).toString() + "-flag"
+            Random.nextInt(from = 0, until = 1084).toString()
         }
+    }
 
+    private fun String.getInitials(): String = this.split(" ").let {
+        "${it[0][0]}${(it[1][0])}"
     }
 }
 
