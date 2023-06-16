@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
+import kotlin.random.Random
 
 class ContactListViewModel : ViewModel() {
 
@@ -38,8 +39,10 @@ class ContactListViewModel : ViewModel() {
     private fun getAvatarStringForUsers(users: List<User>): List<String> = users.map {
         if ((it.id).toInt() % 2 == 0)
             it.name.getInitials()
-        else
-            "placeHolderString"
+        else {
+            Random.nextInt(from = 0, until = 500).toString() + "-flag"
+        }
+
     }
 }
 
