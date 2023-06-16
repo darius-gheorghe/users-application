@@ -157,27 +157,25 @@ object UserPostPage {
     @Composable
     private fun UserPostCard(posting: Post) {
         Card(
-            modifier = Modifier.padding(1.dp),
+            modifier = Modifier
+                .height(120.dp)
+                .padding(1.dp),
             shape = RoundedCornerShape(0.dp),
             colors = CardDefaults.cardColors(containerColor = StyledColors.GRAY_INFO)
         ) {
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 24.dp)
+                    .padding(top = 24.dp, start = 24.dp, end = 24.dp)
             ) {
                 Text(
                     text = posting.title,
                     style = StyledText.textBoldBlack,
-                    modifier = Modifier.padding(
-                        top = 24.dp,
-                        bottom = 10.dp
-                    )
+                    modifier = Modifier.padding(bottom = 10.dp).height(20.dp)
                 )
                 Text(
                     text = posting.body,
                     style = StyledText.displayRegular,
-                    modifier = Modifier.padding(bottom = 24.dp)
                 )
             }
         }
