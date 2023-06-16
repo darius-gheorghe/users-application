@@ -62,7 +62,7 @@ object ContactListPage {
             modifier = Modifier.fillMaxSize(),
             contentAlignment = Alignment.Center
         ) {
-            CircularProgressIndicator(color = StyledColors.WHITE, strokeWidth = 5.dp)
+            CircularProgressIndicator(color = StyledColors.WHITE, strokeWidth = 2.dp)
         }
     }
 

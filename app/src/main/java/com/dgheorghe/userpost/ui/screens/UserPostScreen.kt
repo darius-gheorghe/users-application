@@ -3,6 +3,8 @@ package com.dgheorghe.userpost.ui.screens
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -14,6 +16,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
@@ -32,6 +35,7 @@ import com.dgheorghe.userpost.R
 import com.dgheorghe.userpost.domain.Post
 import com.dgheorghe.userpost.ui.theme.StyledColors
 import com.dgheorghe.userpost.ui.theme.StyledText
+import com.dgheorghe.userpost.ui.viewmodel.UserPostScreenState
 import com.dgheorghe.userpost.ui.viewmodel.UserPostViewModel
 
 object UserPostPage {
@@ -48,29 +52,62 @@ object UserPostPage {
         val postListState by viewModel.postListState.collectAsState()
 
         Scaffold(topBar = { UserPostTopBar(navController) }) {
-            Column(
-                modifier = Modifier
-                    .verticalScroll(rememberScrollState())
-                    .padding(it)
-                    .fillMaxWidth(),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Box(
-                    contentAlignment = Alignment.Center,
-                    modifier = Modifier
-                        .padding(top = 16.dp)
-                        .size(46.dp)
-                ) {
-                    GetAvatarForUser(avatarString = contactAvatarString)
-                }
-                ContactName(contactName = contactName)
-                ContactEmail(contactEmail = contactEmail)
-                LazyColumn(modifier = Modifier.height(480.dp)) {
-                    itemsIndexed(postListState) { _, posting ->
-                        UserPostCard(posting = posting)
-                    }
+            when (postListState) {
+                is UserPostScreenState.Loading -> LoadingState()
+                else -> with((postListState as UserPostScreenState.Success).postList) {
+                    SuccessState(
+                        it,
+                        contactAvatarString,
+                        contactName,
+                        contactEmail,
+                        posts = this
+                    )
                 }
             }
+        }
+    }
+
+    @Composable
+    private fun SuccessState(
+        paddingValues: PaddingValues,
+        contactAvatarString: String,
+        contactName: String,
+        contactEmail: String,
+        posts: List<Post>
+    ) {
+        Column(
+            modifier = Modifier
+                .verticalScroll(rememberScrollState())
+                .padding(paddingValues)
+                .fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Box(
+                contentAlignment = Alignment.Center,
+                modifier = Modifier
+                    .padding(top = 16.dp)
+                    .size(46.dp)
+            ) {
+                GetAvatarForUser(avatarString = contactAvatarString)
+            }
+            ContactName(contactName = contactName)
+            ContactEmail(contactEmail = contactEmail)
+
+            LazyColumn(modifier = Modifier.height(480.dp)) {
+                itemsIndexed(posts) { _, posting ->
+                    UserPostCard(posting = posting)
+                }
+            }
+        }
+    }
+
+    @Composable
+    private fun LoadingState() {
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ) {
+            CircularProgressIndicator(color = StyledColors.DARK_GRAY, strokeWidth = 2.dp)
         }
     }
 
