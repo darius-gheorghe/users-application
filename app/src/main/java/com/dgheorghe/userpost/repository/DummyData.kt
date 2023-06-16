@@ -81,34 +81,25 @@ object DummyData {
 
     private val mockedUserPost1 = Post(
         id = 15,
-        user_id = 0,
         title = "Inflatia in zilele noastre...",
         body = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
     )
 
     private val mockedUserPost2 = Post(
         id = 15,
-        user_id = 0,
         title = "Inflatia in zilele de ieri...",
         body = "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae."
     )
 
     private val mockedUserPost3 = Post(
         id = 15,
-        user_id = 0,
         title = "Inflatia in zilele de maine...",
         body = "Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur?"
     )
 
-    fun getDummyPostList(userId: Long) = listOf(
-        mockedUserPost1.copy(user_id = userId),
-        mockedUserPost2.copy(user_id = userId),
-        mockedUserPost3.copy(user_id = userId),
-        mockedUserPost1.copy(user_id = userId),
-        mockedUserPost2.copy(user_id = userId),
-        mockedUserPost3.copy(user_id = userId),
-        mockedUserPost1.copy(user_id = userId),
-        mockedUserPost2.copy(user_id = userId),
-        mockedUserPost3.copy(user_id = userId),
+    fun getDummyPostList() = listOf(
+        mockedUserPost1,
+        mockedUserPost2,
+        mockedUserPost3,
     )
 }

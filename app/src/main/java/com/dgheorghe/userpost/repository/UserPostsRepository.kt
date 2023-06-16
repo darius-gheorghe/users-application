@@ -1,5 +1,6 @@
 package com.dgheorghe.userpost.repository
 
+import android.util.Log
 import com.dgheorghe.userpost.api.RetrofitUserInstance
 import com.dgheorghe.userpost.domain.Post
 import kotlinx.coroutines.CoroutineScope
@@ -20,9 +21,10 @@ class UserPostsRepository(userId: Long) {
             runCatching {
                 userPostService.getUserPosts(userId)
             }.onSuccess {
-                observeUserPosts.tryEmit(it)
+                observeUserPosts.emit(it)
             }.onFailure {
-                observeUserPosts.emit(DummyData.getDummyPostList(userId))
+                Log.e( "UserPostsRepository === getUserPosts() failure -: ", it.message!!)
+                observeUserPosts.emit(DummyData.getDummyPostList())
                 this.cancel()
             }
         }
