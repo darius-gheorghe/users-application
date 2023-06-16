@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.dgheorghe.userpost.domain.User
 import com.dgheorghe.userpost.repository.UsersRepository
+import com.dgheorghe.userpost.ui.screens.getInitials
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -25,15 +26,27 @@ class ContactListViewModel : ViewModel() {
         )
     }
 
-    private fun getUsersFromRepository(): Flow<ContactListScreenState> = userListRepository.observeUserList
-        .map {
-            ContactListScreenState.Success(
-                it.filter { user -> user.status == "active" }
-            )
-        }
+    private fun getUsersFromRepository(): Flow<ContactListScreenState> =
+        userListRepository.observeUserList
+            .map {
+                val activeUsers = it.filter { user -> user.status == "active" }
+                val avatarStringsList = getAvatarStringForUsers(activeUsers)
+
+                ContactListScreenState.Success(activeUsers, avatarStringsList)
+            }
+
+    private fun getAvatarStringForUsers(users: List<User>): List<String> = users.map {
+        if ((it.id).toInt() % 2 == 0)
+            it.name.getInitials()
+        else
+            "placeHolderString"
+    }
 }
 
 sealed interface ContactListScreenState {
     object Loading : ContactListScreenState
-    data class Success(val usersList: List<User>): ContactListScreenState
+    data class Success(
+        val usersList: List<User>,
+        val avatarStringsList: List<String>
+    ) : ContactListScreenState
 }

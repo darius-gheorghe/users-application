@@ -47,10 +47,13 @@ object ContactListPage {
         val uiState by viewModel.uiState.collectAsState()
 
         when (uiState) {
-            is ContactListScreenState.Success -> SuccessState(
-                userList = (uiState as ContactListScreenState.Success).usersList,
-                navController = navController
-            )
+            is ContactListScreenState.Success -> with((uiState as ContactListScreenState.Success)) {
+                SuccessState(
+                    userList = this.usersList,
+                    avatarStrings = this.avatarStringsList,
+                    navController = navController
+                )
+            }
 
             is ContactListScreenState.Loading -> LoadingState()
         }
@@ -67,7 +70,11 @@ object ContactListPage {
     }
 
     @Composable
-    private fun SuccessState(userList: List<User>, navController: NavController) {
+    private fun SuccessState(
+        navController: NavController,
+        userList: List<User>,
+        avatarStrings: List<String>
+    ) {
         Column(
             modifier = Modifier
                 .verticalScroll(rememberScrollState())
@@ -78,8 +85,12 @@ object ContactListPage {
             LazyColumn(
                 modifier = Modifier.height(564.dp)
             ) {
-                itemsIndexed(userList) { _, userDetails ->
-                    ContactDetailsCard(navController = navController, userDetails)
+                itemsIndexed(userList) { index, userDetails ->
+                    ContactDetailsCard(
+                        navController = navController,
+                        userDetails,
+                        avatarStrings[index]
+                    )
                 }
             }
         }
@@ -118,7 +129,11 @@ object ContactListPage {
     }
 
     @Composable
-    private fun ContactDetailsCard(navController: NavController, userDetails: User) {
+    private fun ContactDetailsCard(
+        navController: NavController,
+        userDetails: User,
+        avatarString: String
+    ) {
         Card(
             modifier = Modifier.padding(1.dp),
             shape = RoundedCornerShape(0.dp),
@@ -135,15 +150,13 @@ object ContactListPage {
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Start
             ) {
-                val avatarString = getUserAvatarString(userDetails.id.toInt(), userDetails.name)
-
                 Box(
                     contentAlignment = Alignment.Center,
                     modifier = Modifier
                         .padding(end = 16.dp)
                         .size(46.dp)
                 ) {
-                    GetAvatarForUser(avatarString = avatarString)
+                    UserAvatar.GetAvatarForUser(avatarString = avatarString)
                 }
                 ContactNameText(contactName = userDetails.name)
                 ContactNavigationIcon(

@@ -88,7 +88,7 @@ object UserPostPage {
                     .padding(top = 16.dp)
                     .size(46.dp)
             ) {
-                GetAvatarForUser(avatarString = contactAvatarString)
+                UserAvatar.GetAvatarForUser(avatarString = contactAvatarString)
             }
             ContactName(contactName = contactName)
             ContactEmail(contactEmail = contactEmail)
