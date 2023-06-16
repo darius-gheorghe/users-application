@@ -1,5 +1,6 @@
 package com.dgheorghe.userpost.repository
 
+import android.util.Log
 import com.dgheorghe.userpost.api.RetrofitUserInstance
 import com.dgheorghe.userpost.domain.User
 import kotlinx.coroutines.CoroutineScope
@@ -23,6 +24,7 @@ class UsersRepository {
             }.onSuccess {
                 observeUserList.emit(it)
             }.onFailure {
+                Log.e( "UsersRepository === getUsersList() failure -: ", it.message!!)
                 //Used dummy data as the api seems to be down from time to time
                 observeUserList.emit(DummyData.userList)
                 this.cancel()
