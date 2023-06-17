@@ -25,6 +25,9 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -175,9 +178,23 @@ object UserPostPage {
                         .padding(bottom = 10.dp)
                         .height(20.dp)
                 )
+
+                var postingBody by remember { mutableStateOf(posting.body) }
+
                 Text(
-                    text = posting.body,
+                    text = postingBody,
                     style = StyledText.displayRegular,
+                    onTextLayout = { textLayoutResult ->
+                        if (textLayoutResult.hasVisualOverflow) {
+                            val lastCharacterRendered = textLayoutResult.getLineEnd(
+                                lineIndex = 1,
+                                visibleEnd = true
+                            )
+
+                            postingBody = postingBody
+                                .substring(startIndex = 0, endIndex = lastCharacterRendered) + "..."
+                        }
+                    }
                 )
             }
         }
