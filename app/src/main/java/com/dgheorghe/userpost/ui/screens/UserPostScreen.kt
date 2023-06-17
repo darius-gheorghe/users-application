@@ -171,33 +171,42 @@ object UserPostPage {
                     .fillMaxWidth()
                     .padding(top = 24.dp, start = 24.dp, end = 24.dp)
             ) {
-                Text(
-                    text = posting.title,
-                    style = StyledText.textBoldBlack,
-                    modifier = Modifier
-                        .padding(bottom = 10.dp)
-                        .height(20.dp)
-                )
-
-                var postingBody by remember { mutableStateOf(posting.body) }
-
-                Text(
-                    text = postingBody,
-                    style = StyledText.displayRegular,
-                    onTextLayout = { textLayoutResult ->
-                        if (textLayoutResult.hasVisualOverflow) {
-                            val lastCharacterRendered = textLayoutResult.getLineEnd(
-                                lineIndex = 1,
-                                visibleEnd = true
-                            )
-
-                            postingBody = postingBody
-                                .substring(startIndex = 0, endIndex = lastCharacterRendered) + "..."
-                        }
-                    }
-                )
+                PostTitle(title = posting.title)
+                PostContent(content = posting.body)
             }
         }
+    }
+
+    @Composable
+    fun PostTitle(title: String) {
+        Text(
+            text = title,
+            style = StyledText.textBoldBlack,
+            modifier = Modifier
+                .padding(bottom = 10.dp)
+                .height(20.dp)
+        )
+    }
+
+    @Composable
+    fun PostContent(content: String) {
+        var postingBody by remember { mutableStateOf(content) }
+
+        Text(
+            text = postingBody,
+            style = StyledText.displayRegular,
+            onTextLayout = { textLayoutResult ->
+                if (textLayoutResult.hasVisualOverflow) {
+                    val lastCharacterRendered = textLayoutResult.getLineEnd(
+                        lineIndex = 1,
+                        visibleEnd = true
+                    )
+
+                    postingBody = postingBody
+                        .substring(startIndex = 0, endIndex = lastCharacterRendered) + "..."
+                }
+            }
+        )
     }
 
     private fun navigateToContactList(navController: NavController) =
