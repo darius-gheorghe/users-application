@@ -7,6 +7,7 @@ import androidx.compose.ui.unit.sp
 class StyledText {
     companion object {
         val displayBold: TextStyle = TextStyle(
+            fontFamily = SFProDisplay,
             fontWeight = FontWeight.Bold,
             fontSize = 24.sp,
             color = StyledColors.BLACK,
@@ -14,6 +15,7 @@ class StyledText {
         )
 
         val displayRegular: TextStyle = TextStyle(
+            fontFamily = SFProDisplay,
             fontWeight = FontWeight.Normal,
             fontSize = 17.sp,
             color = StyledColors.DARK_GRAY_SECONDARY,
@@ -28,6 +30,7 @@ class StyledText {
         )
 
         val textRegularGray: TextStyle = TextStyle(
+            fontFamily = SFProText,
             fontWeight = FontWeight.Normal,
             fontSize = 17.sp,
             color = StyledColors.DARK_GRAY_SECONDARY,
@@ -35,6 +38,7 @@ class StyledText {
         )
 
         val textBoldWhite: TextStyle = TextStyle(
+            fontFamily = SFProText,
             fontWeight = FontWeight.Bold,
             fontSize = 17.sp,
             color = StyledColors.WHITE,
@@ -42,6 +46,7 @@ class StyledText {
         )
 
         val textBoldBlack: TextStyle = TextStyle(
+            fontFamily = SFProText,
             fontWeight = FontWeight.Bold,
             fontSize = 17.sp,
             color = StyledColors.BLACK,
@@ -49,6 +54,7 @@ class StyledText {
         )
 
         val textSemiBold: TextStyle = TextStyle(
+            fontFamily = SFProText,
             fontWeight = FontWeight.SemiBold,
             fontSize = 13.sp,
             color = StyledColors.DARK_GRAY,

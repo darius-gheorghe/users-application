@@ -153,7 +153,7 @@ object UserPostPage {
         Text(
             modifier = Modifier.padding(top = 10.dp, bottom = 34.dp),
             text = contactEmail,
-            style = StyledText.displayRegular,
+            style = StyledText.textRegularGray,
         )
     }
 
