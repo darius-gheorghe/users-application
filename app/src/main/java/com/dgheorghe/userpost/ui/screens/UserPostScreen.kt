@@ -153,23 +153,21 @@ object UserPostPage {
         Text(
             modifier = Modifier.padding(top = 10.dp, bottom = 34.dp),
             text = contactEmail,
-            style = StyledText.textRegularGray,
+            style = StyledText.displayRegular,
         )
     }
 
     @Composable
     private fun UserPostCard(posting: Post) {
         Card(
-            modifier = Modifier
-                .height(120.dp)
-                .padding(1.dp),
+            modifier = Modifier.padding(1.dp),
             shape = RoundedCornerShape(0.dp),
             colors = CardDefaults.cardColors(containerColor = StyledColors.GRAY_INFO)
         ) {
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = 24.dp, start = 24.dp, end = 24.dp)
+                    .padding(24.dp)
             ) {
                 PostTitle(title = posting.title)
                 PostContent(content = posting.body)
@@ -182,9 +180,8 @@ object UserPostPage {
         Text(
             text = title,
             style = StyledText.textBoldBlack,
-            modifier = Modifier
-                .padding(bottom = 10.dp)
-                .height(20.dp)
+            modifier = Modifier.padding(bottom = 10.dp),
+            maxLines = 1
         )
     }
 
@@ -194,7 +191,8 @@ object UserPostPage {
 
         Text(
             text = postingBody,
-            style = StyledText.displayRegular,
+            style = StyledText.textRegularGray,
+            maxLines = 2,
             onTextLayout = { textLayoutResult ->
                 if (textLayoutResult.hasVisualOverflow) {
                     val lastCharacterRendered = textLayoutResult.getLineEnd(
