@@ -23,11 +23,12 @@ fun UserPostApp() {
             arguments = listOf(
                 navArgument("userId") { type = NavType.IntType },
                 navArgument("userAvatarString") { type = NavType.StringType },
+                navArgument("userName") {type = NavType.StringType},
+                navArgument("userEmail") { type= NavType.StringType}
             )
         ) { backStackEntry ->
             UserPostPage.Screen(
                 navController,
-                backStackEntry.arguments?.getInt("userId")!!,
                 backStackEntry.arguments?.getString("userAvatarString")!!,
                 backStackEntry.arguments?.getString("userName")!!,
                 backStackEntry.arguments?.getString("userEmail")!!

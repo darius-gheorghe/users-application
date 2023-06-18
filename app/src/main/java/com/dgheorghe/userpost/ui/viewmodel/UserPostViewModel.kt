@@ -1,5 +1,6 @@
 package com.dgheorghe.userpost.ui.viewmodel
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.dgheorghe.userpost.domain.Post
@@ -8,9 +9,10 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
+import javax.inject.Inject
 
-class UserPostViewModel(userId: Long) : ViewModel() {
-    private val _userPostRepository = UserPostsRepository(userId)
+class UserPostViewModel @Inject constructor(savedStateHandle: SavedStateHandle) : ViewModel() {
+    private val _userPostRepository = UserPostsRepository(savedStateHandle.get<Int>("userId")?.toLong() ?: 0)
     private var _postListState: StateFlow<UserPostScreenState>
 
     val postListState
