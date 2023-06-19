@@ -4,16 +4,20 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.dgheorghe.userpost.domain.User
 import com.dgheorghe.userpost.repository.UsersRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
+import javax.inject.Inject
 import kotlin.random.Random
 
-class ContactListViewModel : ViewModel() {
+@HiltViewModel
+class ContactListViewModel @Inject constructor(
+    private val userListRepository: UsersRepository
+) : ViewModel() {
 
-    private val userListRepository = UsersRepository()
     private var _uiState: StateFlow<ContactListScreenState>
     val uiState
         get() = _uiState

@@ -1,33 +1,40 @@
 package com.dgheorghe.userpost.ui.viewmodel
 
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.dgheorghe.userpost.domain.Post
-import com.dgheorghe.userpost.repository.UserPostsRepository
+import com.dgheorghe.userpost.repository.UserPostRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
 
-class UserPostViewModel @Inject constructor(savedStateHandle: SavedStateHandle) : ViewModel() {
-    private val _userPostRepository = UserPostsRepository(savedStateHandle.get<Int>("userId")?.toLong() ?: 0)
-    private var _postListState: StateFlow<UserPostScreenState>
+@HiltViewModel
+class UserPostViewModel @Inject constructor(
+    private val _userPostRepository: UserPostRepository,
+) : ViewModel() {
 
+    private var _postListState: StateFlow<UserPostScreenState> = MutableStateFlow(UserPostScreenState.Loading)
     val postListState
         get() = _postListState
 
-    init {
-        _postListState = getUserPosts().stateIn(
+    fun updateUserPosts(userId: Long) {
+        _postListState = getUserPosts(userId).stateIn(
             viewModelScope,
             SharingStarted.Eagerly,
-            UserPostScreenState.Loading
+            UserPostScreenState.Success(emptyList())
         )
     }
 
-    private fun getUserPosts() =
-        _userPostRepository.observeUserPosts.map { UserPostScreenState.Success(it) }
+    fun clearUserPostsFlow() {
+        _postListState = MutableStateFlow(UserPostScreenState.Loading)
+    }
+
+    private fun getUserPosts(userId: Long) =
+        _userPostRepository.getUserPosts(userId).map { UserPostScreenState.Success(it) }
 }
 
 sealed interface UserPostScreenState {
