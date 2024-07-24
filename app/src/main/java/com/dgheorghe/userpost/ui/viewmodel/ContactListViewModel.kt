@@ -40,7 +40,7 @@ class ContactListViewModel @Inject constructor(
             }
 
     private fun getAvatarStringForUsers(users: List<User>): List<String> = users.map {
-        if ((it.id).toInt() % 12 == 0)
+        if ((it.id).toInt() % 2 == 0)
             it.name.getInitials()
         else {
             Random.nextInt(from = 0, until = 1084).toString()
